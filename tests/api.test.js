@@ -1,11 +1,11 @@
 'use strict';
 
 const request = require('supertest');
-
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 
-const app = require('../src/app')(db);
+// const routes = require('../src/routes')
+const { app, closeServer } = require('../index');
 const buildSchemas = require('../src/schemas');
 
 describe('API tests', () => {
@@ -244,4 +244,6 @@ describe('API tests', () => {
                 .expect(200, done);
         });
     });
+
+    closeServer()
 });

@@ -12,7 +12,7 @@
     "start": "node index.js",
     "lint": "./node_modules/.bin/eslint src/",
     "lint:fix": "./node_modules/.bin/eslint src/ --fix",
-    "coverage": "nyc --reporter html --reporter text npm test"
+    "coverage": "nyc --reporter=html --reporter=text npm test"
   },
   "pre-push": "lint, coverage",
   "keywords": [
