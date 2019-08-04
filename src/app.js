@@ -9,6 +9,16 @@ const jsonParser = bodyParser.json();
 const swaggerUi = require('swagger-ui-express')
 const swaggerSpecs = require('../swaggerconfig.js')
 
+const winston = require('winston')
+const expressWinston = require('express-winston')
+
+
+app.use(expressWinston.logger({
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'info.log' })
+  ]
+}));
 
 module.exports = (db) => {
     app.get('/api-docs.json', (req, res) => {
@@ -268,6 +278,7 @@ module.exports = (db) => {
     */
 
     app.get('/rides/:id', (req, res) => {
+      throw 'errrrr'
         db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, function (err, rows) {
             if (err) {
                 return res.send(500, {
@@ -286,6 +297,14 @@ module.exports = (db) => {
             res.send(rows);
         });
     });
+
+
+    app.use(expressWinston.errorLogger({
+      transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: 'error.log' })
+      ]
+    }));
 
     return app;
 };
