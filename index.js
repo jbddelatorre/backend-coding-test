@@ -12,10 +12,26 @@ const db = new sqlite3.Database(':memory:');
 
 const buildSchemas = require('./src/schemas');
 
+const routes = require('./src/routes')
+
+const {
+	infoLogger,
+	errorLogger
+} = require('./src/config/winstonconfig.js');
+
 db.serialize(() => {
     buildSchemas(db);
+    global.db = db
 
-    const app = require('./src/app')(db);
+    app.use(infoLogger);
+    app.use(jsonParser);
+    app.use(routes);
+    app.use(errorLogger);
 
-    app.listen(port, () => console.log(`App started and listening on port ${port}`));
+    const server = app.listen(port, () => console.log(`App started and listening on port ${port}`));
+
+    module.exports = {
+		app,
+		closeServer: () => server.close()
+	}
 });
