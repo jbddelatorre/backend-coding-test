@@ -15,5 +15,7 @@
         "ecmaVersion": 2018
     },
     "rules": {
+        "func-names": ["error", "never"],
+        "no-shadow": ["error", { "allow": ["err"] }]
     }
 }
