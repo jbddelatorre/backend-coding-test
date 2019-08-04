@@ -9,8 +9,11 @@
   "scripts": {
     "dev": "./node_modules/.bin/nodemon index.js",
     "test": "mocha tests",
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "./node_modules/.bin/eslint src/",
+    "coverage": "nyc --reporter html --reporter text npm test"
   },
+  "pre-push": "lint, coverage",
   "keywords": [
     "Xendit"
   ],
@@ -19,13 +22,20 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
+    "express-winston": "^3.2.1",
     "sqlite3": "^4.0.6",
     "swagger-jsdoc": "^3.3.0",
-    "swagger-ui-express": "^4.0.7"
+    "swagger-ui-express": "^4.0.7",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.1",
+    "nyc": "^14.1.1",
+    "pre-push": "^0.1.1",
     "supertest": "^4.0.2"
   }
 }
