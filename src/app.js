@@ -121,9 +121,6 @@ module.exports = (db) => {
     *                       message:
     *                           type: string
     *                           description: The message for the error
-    *               type: object
-    *               items:
-    *
     *           500:
     *               description: Server error. Unknown error.
     */
@@ -221,11 +218,34 @@ module.exports = (db) => {
     * @swagger
     * /rides:
     *   get:
-    *       summary: Fetch all rides
-    *       description: Fetches all entries of ride
+    *       summary: Fetches rides
+    *       description: Fetches entries of rides.
+    *                    Pagination is supported. Passing no parameters will return all data.
+    *       parameters:
+    *         - in: query
+    *           name: page
+    *           schema:
+    *             type: integer
+    *           description: The page number of the query requested
+    *         - in: query
+    *           name: size
+    *           schema:
+    *             type: integer
+    *           description: The size of data to be returned
     *       responses:
     *           200:
     *               description: Returns an array of all rides
+    *           422:
+    *               description: Bad Request, Validation Error.
+    *               schema:
+    *                   type: object
+    *                   properties:
+    *                       error_code:
+    *                           type: string
+    *                           description: The error code identifier
+    *                       message:
+    *                           type: string
+    *                           description: The message for the error
     *           404:
     *               description: Could not find requested data
     *           500:
@@ -233,7 +253,32 @@ module.exports = (db) => {
     */
 
   app.get('/rides', (req, res) => {
-    db.all('SELECT * FROM Rides', (err, rows) => {
+    const page = Number(req.query.page);
+    const size = Number(req.query.size);
+    const noPaginate = !('page' in req.query) && !('size' in req.query);
+
+    let sqlQuery = 'SELECT * FROM Rides';
+
+    if (!noPaginate) {
+      if (page <= 0 || !Number.isInteger(page)) {
+        return res.status(422).send({
+          error_code: 'VALIDATION_ERROR',
+          message: 'Page must be an integer greater than or equal to 1.',
+        });
+      }
+
+      if (page <= 0 || !Number.isInteger(size)) {
+        return res.status(422).send({
+          error_code: 'VALIDATION_ERROR',
+          message: 'Size must be an integer greater than or equal to 1.',
+        });
+      }
+
+      const offset = page - 1;
+      sqlQuery = `SELECT * FROM Rides LIMIT ${size} OFFSET ${offset * size}`;
+    }
+
+    db.all(sqlQuery, (err, rows) => {
       if (err) {
         return res.status(500).send({
           error_code: 'SERVER_ERROR',
@@ -250,6 +295,8 @@ module.exports = (db) => {
 
       return res.status(200).send(rows);
     });
+
+    return undefined;
   });
 
   /**
@@ -262,6 +309,8 @@ module.exports = (db) => {
     *           - in: path
     *             name: id
     *             required: true
+    *             schema:
+    *               type: integer
     *             description: The ride ID
     *             example: 11
     *       responses:

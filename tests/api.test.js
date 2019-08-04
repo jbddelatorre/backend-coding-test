@@ -160,13 +160,63 @@ describe('API tests', () => {
     })
 
     describe('GET /rides', () => {
-        it('should return rides', (done) => {
+        it('should return all rides', (done) => {
             request(app)
                 .get('/rides')
                 .expect('Content-Type', /json/)
                 .expect(200, done);
         });
     });
+
+    const PAGINATE_TEST_DATA = [
+        {
+            'query': {
+                "page": 1,
+                "size": 3
+            },
+            response: 200
+        },
+        {
+            'query': {
+                "page": 'one',
+                "size": 3
+            },
+            response: 422
+        },
+        {
+            'query': {
+                "page": 2,
+                "size": false
+            },
+            response: 422
+        },
+        {
+            'query': {
+                "page": '',
+                "size": ''
+            },
+            response: 422
+        },
+        {
+            'query': {
+                "page": 1.3,
+                "size": 3.2
+            },
+            response: 422
+        },
+    ]
+
+    PAGINATE_TEST_DATA.forEach(test => {
+        describe('GET /rides', () => {
+            it('should return paginated rides', (done) => {
+                request(app)
+                    .get('/rides')
+                    .query(test.query)
+                    .expect('Content-Type', /json/)
+                    .expect(test.response, done);
+            });
+        });
+    })
 
     describe('GET /rides/:id', () => {
         it('should return rides detail', (done) => {
