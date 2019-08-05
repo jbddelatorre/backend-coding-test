@@ -5,6 +5,7 @@ const expressWinston = require('express-winston');
 const infoLogger = expressWinston.logger({
   transports: [
     new winston.transports.Console(),
+    new winston.transports.File({ filename: 'info.log' }),
   ],
 });
 

@@ -77,9 +77,11 @@ const {
     *                       error_code:
     *                           type: string
     *                           description: The error code identifier
+    *                           example: VALIDATION_ERROR
     *                       message:
     *                           type: string
     *                           description: The message for the error
+    *                           example: Rider name must be a non empty string
     *           500:
     *               description: Server error. Unknown error.
     */

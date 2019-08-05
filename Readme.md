@@ -1,3 +1,73 @@
+# Rides API
+
+This a node-express server that allows to fetch and create rides to be stored in an in-memory database.
+
+## Dependencies
+
+To run the server, the following are needed:
+
+`Node (>8.6 and <= 10)`
+
+`npm`
+
+## Getting Started
+
+After cloning the repo to your local machine, the following steps are:
+
+1. Run `npm install` to install all dependencies needed for the server
+2. Run `npm start` to start the server, or you may run `npm run dev` to run the server with hot-reload
+
+## Features
+
+* Create new rides entry
+* Fetch rides entry, with optional query for pagination
+* Fetch detail of specific ride based on ID
+* Endpoint to check server health
+* Web format documentation for api endpoints
+* Implemented protection for SQL injections
+* ES2017 implementation of async/await
+
+## Tests
+
+To run the series of tests, run `npm test`. 
+
+```
+npm test
+```
+
+The tests used are the following. You may also run tests individually.
+
+* `mocha` - Create test cases for api
+    - run `npm run mocha` to run api tests
+* `eslint` - Linting uses airbnb standard
+    - run `npm run lint` to run linter, and `npm run lint:fix` to apply automated lint fixes
+* `nyc` - Code coverage of greater than `80%` for lines, statements, and branches
+    - run `npm run coverage` to run test coverage
+
+Load testing is also supported with the use `artillery` and `forever`. Load test will start a daemon to run tests in the background. 
+
+```
+npm run test:load
+```
+
+To stop the daemon, run the command `npm run test:load:stop`. Results will be found in `out.log`
+
+You may also run the test without the daemon using `npm run load`. Config for the load testing can be found at `artillery.yaml`
+
+## Git hooks
+
+The git hook pre-push is also installed. Tests will run before being able to successfully push.
+
+## Logs
+
+Server interactions are also logged with the used of `winston`. All error logs will be found in `error.log`, while informational logs will be found at `info.log`
+
+## Documentation
+
+API documentation can be found at localhost:8010/api-docs
+
+To make updates to the documentation, just update the content under @swagger decorator found in each of the api route
+
 # Xendit Coding Exercise
 
 The goal of these exercises are to assess your proficiency in software engineering that is related to the daily work that we do at Xendit. Please follow the instructions below to complete the assessment.
