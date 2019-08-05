@@ -1,0 +1,31 @@
+config:
+  target: "http://localhost:8010"
+  phases:
+    - duration: 30
+      arrivalRate: 100
+  ensure:
+    p99: 50
+scenarios:
+  - name: "Test all endpoints"
+    flow:
+      - post:
+          url: "/rides"
+          json:
+            start_lat: -60.5
+            end_lat: -72
+            start_long: 12.3
+            end_long: 40
+            rider_name: "Rider Jason"
+            driver_name: "Driver Jason"
+            driver_vehicle: "Nissan Sentra"
+      - get:
+          url: "/rides"
+          qs:
+            page: 5
+            size: 10
+      - get:
+          url: "/rides/5"
+      - get:
+          url: "/health"
+      - get:
+          url: "/api-docs"
