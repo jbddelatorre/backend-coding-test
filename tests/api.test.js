@@ -42,7 +42,7 @@ describe('API tests', () => {
     describe('GET /rides/:id', () => {
         it('should return 404', (done) => {
             request(app)
-                .get('/rides/10')
+                .get('/rides/99')
                 .expect('Content-Type', /json/)
                 .expect(404, done);
         });
@@ -145,6 +145,18 @@ describe('API tests', () => {
             },
             'response': 422
         },
+        {
+            'body': {
+                "start_lat": -66.5,
+                "end_lat": -90,
+                "start_long": 12.3,
+                "end_long": 40,
+                "rider_name": "'driver jason'",
+                "driver_name": "Driver Jason",
+                "driver_vehicle": "car"
+            },
+            'response': 200
+        },
     ]
 
     POST_RIDES_TEST_DATA.forEach(test => {
@@ -218,6 +230,18 @@ describe('API tests', () => {
         });
     })
 
+    describe('GET /rides', () => {
+        it('prevent sql injection', (done) => {
+            request(app)
+                .get('/rides')
+                .query({
+                    size: "3;--"
+                })
+                .expect('Content-Type', /json/)
+                .expect(422, done);
+        });
+    });
+
     describe('GET /rides/:id', () => {
         it('should return rides detail', (done) => {
             request(app)
@@ -235,6 +259,17 @@ describe('API tests', () => {
                 .expect(404, done);
         });
     });
+    
+
+    describe('GET /rides/:id', () => {
+        it('prevent sql injection', (done) => {
+            request(app)
+                .get("/rides/1' OR '1=1")
+                .expect('Content-Type', /json/)
+                .expect(422, done)
+        });
+    });
+
 
     describe('GET /api-docs.json', () => {
         it('should return api-docs json', (done) => {
@@ -242,6 +277,18 @@ describe('API tests', () => {
                 .get('/api-docs.json')
                 .expect('Content-Type', /json/)
                 .expect(200, done);
+        });
+    });
+
+    describe('POST /rides/:id', () => {
+        it('should return 404', (done) => {
+            request(app)
+                .post('/rides/1')
+                .send({
+                    test: 'no post method'
+                })
+                .expect('Content-Type', /json/)
+                .expect(404, done);
         });
     });
 

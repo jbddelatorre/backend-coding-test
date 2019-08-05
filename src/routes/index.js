@@ -8,6 +8,7 @@ const {
   getRidesDetail,
   apiDocsJson,
   apiDocs,
+  invalidRoute,
 } = require('../controllers');
 
 const router = Router({
@@ -47,6 +48,11 @@ router.get(
 router.get(
   '/rides/:id',
   getRidesDetail,
+);
+
+router.use(
+  '/',
+  invalidRoute,
 );
 
 module.exports = router;

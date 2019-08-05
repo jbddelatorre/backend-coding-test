@@ -1,7 +1,7 @@
 /* global db */
 
-const getAsync = sql => new Promise(((resolve, reject) => {
-  db.all(sql, (err, rows) => {
+const getAsync = (sql, values) => new Promise(((resolve, reject) => {
+  db.all(sql, values, (err, rows) => {
     if (err) reject(err);
     else resolve(rows);
   });
