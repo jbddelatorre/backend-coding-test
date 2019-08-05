@@ -47,6 +47,7 @@ module.exports = async (req, res) => {
   const noPaginate = !('page' in req.query) && !('size' in req.query);
 
   let sqlQuery = 'SELECT * FROM Rides';
+  let values = [];
 
   if (!noPaginate) {
     if (page <= 0 || !Number.isInteger(page)) {
@@ -64,11 +65,12 @@ module.exports = async (req, res) => {
     }
 
     const offset = page - 1;
-    sqlQuery = `SELECT * FROM Rides LIMIT ${size} OFFSET ${offset * size}`;
+    sqlQuery = 'SELECT * FROM Rides LIMIT ? OFFSET ?';
+    values = [size, offset * size];
   }
 
   try {
-    const rows = await getAsync(sqlQuery);
+    const rows = await getAsync(sqlQuery, values);
 
     if (rows.length === 0) {
       return res.status(404).send({

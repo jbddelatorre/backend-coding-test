@@ -61,10 +61,19 @@ const {
     */
 
 module.exports = async (req, res) => {
-  const sql = `SELECT * FROM Rides WHERE rideID='${req.params.id}'`;
+  const id = Number(req.params.id);
+
+  if (!Number.isInteger(id) || Number.isNaN(id)) {
+    return res.status(422).send({
+      error_code: 'VALIDATION_ERROR',
+      message: 'ID must be an integer.',
+    });
+  }
+
+  const sql = 'SELECT * FROM Rides WHERE rideID= ?';
 
   try {
-    const rows = await getAsync(sql);
+    const rows = await getAsync(sql, id);
 
     if (rows.length === 0) {
       return res.status(404).send({
