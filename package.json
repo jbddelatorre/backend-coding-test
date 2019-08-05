@@ -7,17 +7,18 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "./node_modules/.bin/nodemon index.js",
-    "test": "mocha tests",
+    "dev": "nodemon index.js",
+    "mocha": "mocha tests",
     "start": "node index.js",
-    "lint": "./node_modules/.bin/eslint src/",
-    "lint:fix": "./node_modules/.bin/eslint src/ --fix",
-    "coverage": "nyc --reporter=html --reporter=text npm test",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "coverage": "nyc --reporter=text npm run mocha",
+    "test": "npm run lint && npm run coverage",
     "load": "./node_modules/.bin/artillery run artillery.yaml",
     "test:load": "forever start -o out.log ./node_modules/.bin/artillery run artillery.yaml",
     "test:load:stop": "forever stop ./node_modules/.bin/artillery"
   },
-  "pre-push": "lint, coverage",
+  "pre-push": "test",
   "keywords": [
     "Xendit"
   ],

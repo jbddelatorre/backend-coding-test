@@ -31,9 +31,11 @@ const {
     *                       error_code:
     *                           type: string
     *                           description: The error code identifier
+    *                           example: RIDES_NOT_FOUND_ERROR
     *                       message:
     *                           type: string
     *                           description: The message for the error
+    *                           example: Could not find any rides
     *           404:
     *               description: Could not find requested data
     *           500:
