@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
       });
     }
 
-    if (page <= 0 || !Number.isInteger(size)) {
+    if (size <= 0 || !Number.isInteger(size)) {
       return res.status(422).send({
         error_code: 'VALIDATION_ERROR',
         message: 'Size must be an integer greater than or equal to 1.',
