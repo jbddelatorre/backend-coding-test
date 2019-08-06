@@ -211,6 +211,20 @@ describe('API tests', () => {
         },
         {
             'query': {
+                "page": 0,
+                "size": 5
+            },
+            response: 422
+        },
+        {
+            'query': {
+                "page": 5,
+                "size": 0
+            },
+            response: 422
+        },
+        {
+            'query': {
                 "page": 1.3,
                 "size": 3.2
             },
